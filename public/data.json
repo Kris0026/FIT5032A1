@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "Physical Health",
+    "description": "How to start strength & cardio safely.",
+    "tags": [
+      "fitness",
+      "nutrition"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Mental Health",
+    "description": "Stress, anxiety, sleep hygiene basics.",
+    "tags": [
+      "stress",
+      "sleep"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Cancer Awareness",
+    "description": "Prostate & testicular cancer checks.",
+    "tags": [
+      "screening",
+      "prevention"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Lifestyle",
+    "description": "Alcohol, smoking, and work\u2013life balance.",
+    "tags": [
+      "habits",
+      "risk"
+    ]
+  }
+]
