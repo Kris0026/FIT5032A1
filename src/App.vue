@@ -44,7 +44,7 @@ const views = {
             <div class="card h-100">
               <div class="card-body">
                 <h5 class="card-title">Mental Wellbeing</h5>
-                <p class="card-text">Stress, sleep, anxiety—practical ways to cope.</p>
+                <p class="card-text">Stress, sleep, anxiety-practical ways to cope.</p>
                 <button class="btn btn-sm btn-primary" @click="$emit('go','topics')">Read more</button>
               </div>
             </div>

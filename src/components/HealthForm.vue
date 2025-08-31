@@ -14,12 +14,12 @@
               <div class="col-md-3">
                 <label class="form-label">Age</label>
                 <input v-model.number="age" type="number" class="form-control" min="18" max="100" required>
-                <div class="form-text" :class="{'text-danger': invalidAge}">18–100 only.</div>
+                <div class="form-text" :class="{'text-danger': invalidAge}">18-100 only.</div>
               </div>
               <div class="col-md-3">
                 <label class="form-label">Resting Heart Rate</label>
                 <input v-model.number="rhr" type="number" class="form-control" min="40" max="120" required>
-                <div class="form-text">Typical adult 60–100 bpm.</div>
+                <div class="form-text">Typical adult 60-100 bpm.</div>
               </div>
               <div class="col-12">
                 <label class="form-label">Goal</label>
