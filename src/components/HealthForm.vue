@@ -1,3 +1,4 @@
+
 <template>
   <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -31,57 +32,35 @@
                   <option>Cardio fitness</option>
                 </select>
               </div>
+              <div class="col-12">
+                <label class="form-label">Comment (optional)</label>
+                <textarea v-model="comment" class="form-control" rows="2" placeholder="Any notes..."></textarea>
+                <div class="form-text">We sanitize this field to prevent XSS.</div>
+              </div>
             </div>
             <div class="mt-3 d-flex gap-2">
               <button class="btn btn-primary" :disabled="!formValid">Submit</button>
               <button type="button" class="btn btn-outline-secondary" @click="reset">Reset</button>
             </div>
           </form>
-          <div v-if="result" class="alert alert-success mt-3">
-            {{ result }}
-          </div>
+          <div v-if="result" class="alert alert-success mt-3" v-html="result"></div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-
+import { ref, computed } from 'vue'
+import { sanitize } from '../utils/sanitize'
 const email = ref('')
 const age = ref(null)
 const rhr = ref(null)
 const goal = ref('')
-
-const isValidEmail = computed(() => /\S+@\S+\.\S+/.test(email.value))
-const invalidAge = computed(() => age.value && (age.value < 18 || age.value > 100))
-const formValid = computed(() => isValidEmail.value && !invalidAge.value && rhr.value && goal.value)
-
+const comment = ref('')
+const isValidEmail = computed(()=>/\S+@\S+\.\S+/.test(email.value))
+const invalidAge = computed(()=>age.value && (age.value<18 || age.value>100))
+const formValid = computed(()=>isValidEmail.value && !invalidAge.value && rhr.value && goal.value)
 const result = ref('')
-
-onMounted(() => {
-  // Prefill from LocalStorage
-  email.value = localStorage.getItem('mh_email') || ''
-  const savedAge = localStorage.getItem('mh_age')
-  age.value = savedAge ? Number(savedAge) : null
-  goal.value = localStorage.getItem('mh_goal') || ''
-})
-
-function handleSubmit () {
-  const tips = {
-    'Lose weight': 'Aim for 150 min/week activity and a small calorie deficit.',
-    'Reduce stress': 'Try 10-min daily breathing or mindfulness; keep regular sleep.',
-    'Improve sleep': 'Limit caffeine after 2pm; keep a fixed bedtime.',
-    'Cardio fitness': 'Add 3×30min brisk walks or cycling per week.'
-  }
-  localStorage.setItem('mh_email', email.value)
-  localStorage.setItem('mh_age', String(age.value))
-  localStorage.setItem('mh_goal', goal.value)
-  result.value = `Thanks! Tailored tip: ${tips[goal.value] || ''}`
-}
-
-function reset () {
-  email.value=''; age.value=null; rhr.value=null; goal.value=''; result.value=''
-}
+function handleSubmit(){ const tips={ 'Lose weight':'Aim for 150 min/week activity and a small calorie deficit.','Reduce stress':'Try 10-min daily breathing or mindfulness; keep regular sleep.','Improve sleep':'Limit caffeine after 2pm; keep a fixed bedtime.','Cardio fitness':'Add 3×30min brisk walks or cycling per week.'}; localStorage.setItem('mh_email', email.value); localStorage.setItem('mh_age', String(age.value)); localStorage.setItem('mh_goal', goal.value); const safeComment=sanitize(comment.value); result.value = `Thanks! Tailored tip: ${tips[goal.value]||''}<br/>Your note: ${safeComment||'(none)'}` }
+function reset(){ email.value=''; age.value=null; rhr.value=null; goal.value=''; comment.value=''; result.value='' }
 </script>
