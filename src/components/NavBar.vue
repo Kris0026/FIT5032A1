@@ -16,6 +16,9 @@
     Data
   </a>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="#" @click.prevent="$emit('navigate','geo')">Map</a>
+</li>
 
           <li class="nav-item"><a :class="linkClass('form')" href="#" @click.prevent="$emit('navigate','form')">Health Check</a></li>
           <li v-if="user && user.role==='admin'" class="nav-item"><a :class="linkClass('admin')" href="#" @click.prevent="$emit('navigate','admin')">Admin</a></li>

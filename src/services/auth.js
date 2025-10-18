@@ -134,3 +134,9 @@ export function seedDemoAccounts() {
   lsSet(USERS_KEY, demo)
   return demo
 }
+import { getFunctions, httpsCallable } from 'firebase/functions'
+import { app } from './firebaseInit'
+
+const functions = getFunctions(app, 'australia-southeast1')
+export const callAdvice = httpsCallable(functions, 'healthAdvice')
+
