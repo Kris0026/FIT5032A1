@@ -1,1 +1,0 @@
-<template><div>AI Cloud Function Demo</div></template>

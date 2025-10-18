@@ -1,1 +1,0 @@
-<template><div>Auth (Firebase)</div></template>

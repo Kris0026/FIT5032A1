@@ -3,10 +3,10 @@
     
     <NavBar :current="currentView" :user="user" @navigate="navigate" @logout="doLogout" />
 
-    <main class="container py-4">
-      
-      <component :is="currentComp" @go="navigate" @logged="onAuth" @registered="onAuth" />
-    </main>
+    <main id="main" class="container py-4" tabindex="-1"> 
+  
+  <component :is="currentComp" @go="navigate" @logged="onAuth" @registered="onAuth" />
+</main>
 
     <FooterBar />
   </div>
@@ -27,6 +27,7 @@ import EmailCenter from './components/EmailCenter.vue'
 import InteractiveTable from './components/InteractiveTable.vue'
 import GeoMap from './components/GeoMap.vue'
 import HomeHero from './components/HomeHero.vue'
+import ExportCenter from './components/ExportCenter.vue'
 
 import {
   initAuth, onUser, login, logout, currentUser,
@@ -49,6 +50,7 @@ const views = {
   admin:    { component: Admin },
   data:   { component: InteractiveTable },
   geo: { component: GeoMap },
+  export:   { component: ExportCenter },
 }
 
 const currentComp = computed(() => {

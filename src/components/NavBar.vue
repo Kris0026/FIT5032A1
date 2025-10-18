@@ -1,45 +1,86 @@
-
+<!-- src/components/NavBar.vue -->
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
     <div class="container">
-      <a class="navbar-brand" href="#" @click.prevent="$emit('navigate','home')">Men's Health</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <a class="navbar-brand fw-semibold" href="#" @click.prevent="emit('navigate','home')">
+        Men's Health
+      </a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#mainNav"
+        aria-controls="mainNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="nav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a :class="linkClass('home')" href="#" @click.prevent="$emit('navigate','home')">Home</a></li>
-          <li class="nav-item"><a :class="linkClass('topics')" href="#" @click.prevent="$emit('navigate','topics')">Topics</a></li>
-          <li class="nav-item"><a :class="linkClass('tools')" href="#" @click.prevent="$emit('navigate','tools')">Tools</a></li>
-          <li class="nav-item">
-  <a class="nav-link" :class="{ active: current==='data' }" @click="$emit('navigate','data')">
-    Data
-  </a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="#" @click.prevent="$emit('navigate','geo')">Map</a>
-</li>
 
-          <li class="nav-item"><a :class="linkClass('form')" href="#" @click.prevent="$emit('navigate','form')">Health Check</a></li>
-          <li v-if="user && user.role==='admin'" class="nav-item"><a :class="linkClass('admin')" href="#" @click.prevent="$emit('navigate','admin')">Admin</a></li>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <!-- left -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-  <a class="nav-link" @click="$emit('navigate','email')">
-    <i class="bi bi-envelope"></i> Email
-  </a> 
-</li>
-
+            <a :class="itemClass('home')"    href="#" @click.prevent="emit('navigate','home')" aria-current="page">Home</a>
+          </li>
+          <li class="nav-item">
+            <a :class="itemClass('topics')"  href="#" @click.prevent="emit('navigate','topics')">Topics</a>
+          </li>
+          <li class="nav-item">
+            <a :class="itemClass('tools')"   href="#" @click.prevent="emit('navigate','tools')">Tools</a>
+          </li>
+          <li class="nav-item">
+            <a :class="itemClass('data')"    href="#" @click.prevent="emit('navigate','data')">Data</a>
+          </li>
+          <li class="nav-item">
+            <a :class="itemClass('geo')"     href="#" @click.prevent="emit('navigate','geo')">Map</a>
+          </li>
+          <li class="nav-item">
+            <a :class="itemClass('form')"    href="#" @click.prevent="emit('navigate','form')">Health Check</a>
+          </li>
+          <li class="nav-item">
+            <a :class="itemClass('email')"   href="#" @click.prevent="emit('navigate','email')">Email</a>
+          </li>
+          <li class="nav-item">
+            <a :class="itemClass('admin')"   href="#" @click.prevent="emit('navigate','admin')">Admin</a>
+          </li>
+          <li class="nav-item">
+            <a :class="itemClass('export')" href="#" @click.prevent="emit('navigate','export')">Export</a>
+          </li>
         </ul>
-        <div class="d-flex align-items-center gap-2 text-light">
-          <span v-if="user" class="small">Hello, {{ user.email }} <span class="badge bg-secondary text-uppercase ms-1">{{ user.role }}</span></span>
-          <button v-if="!user" class="btn btn-outline-light btn-sm" @click="$emit('navigate','login')">Login</button>
-          <button v-if="!user" class="btn btn-warning btn-sm" @click="$emit('navigate','register')">Register</button>
-          <button v-if="user" class="btn btn-outline-light btn-sm" @click="$emit('logout')">Logout</button>
+
+        <!-- right: auth -->
+        <div class="d-flex gap-2">
+          <template v-if="user">
+            <span class="navbar-text me-2 small text-muted">Hello, {{ user.email || 'user' }}</span>
+            <button class="btn btn-outline-secondary btn-sm" @click="emit('logout')">Logout</button>
+          </template>
+          <template v-else>
+            <button class="btn btn-outline-primary btn-sm" @click="emit('navigate','login')">Login</button>
+            <button class="btn btn-warning btn-sm" @click="emit('navigate','register')">Register</button>
+          </template>
         </div>
       </div>
     </div>
   </nav>
 </template>
+
 <script setup>
-const props = defineProps({ current: String, user: Object })
-const linkClass = (name) => ['nav-link', props.current===name?'active':'']
+const props = defineProps({
+  current: { type: String, default: 'home' },
+  user: { type: Object, default: null }
+})
+const emit = defineEmits(['navigate', 'logout'])
+
+function itemClass(view) {
+  return ['nav-link', props.current === view ? 'active' : '']
+}
 </script>
+
+<style scoped>
+.nav-link.active {
+  font-weight: 600;
+  text-decoration: underline;
+}
+</style>
