@@ -6,3 +6,7 @@ export function sanitize(input) {
   cleaned = cleaned.replace(/[<>]/g, (m) => ({'<':'&lt;','>':'&gt;'}[m]))
   return cleaned
 }
+
+export function sanitizeInput(input) {
+  return input.replace(/[<>]/g, c => ({'<':'&lt;','>':'&gt;'}[c]));
+}

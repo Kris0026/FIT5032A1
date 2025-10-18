@@ -14,10 +14,10 @@ Open the URL printed by Vite (e.g., http://localhost:5173).
 - **B.2 Dynamic Data**: `HealthTopics.vue` fetches from `/public/data.json` (served at `/data.json`); form also persists to LocalStorage.
 
 ## Structure
-- `src/components/HealthForm.vue` – form with validation and LocalStorage.
-- `src/components/HealthTopics.vue` – loads topics dynamically.
-- `src/components/Tools.vue` – tool cards.
+- `src/components/HealthForm.vue` - form with validation and LocalStorage.
+- `src/components/HealthTopics.vue` - loads topics dynamically.
+- `src/components/Tools.vue` - tool cards.
 - `src/components/NavBar.vue`, `FooterBar.vue`
-- `public/data.json` – dynamic content source.
+- `public/data.json` - dynamic content source.
 
 > Tip: Make frequent commits to Github while you work.

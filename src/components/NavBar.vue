@@ -11,8 +11,20 @@
           <li class="nav-item"><a :class="linkClass('home')" href="#" @click.prevent="$emit('navigate','home')">Home</a></li>
           <li class="nav-item"><a :class="linkClass('topics')" href="#" @click.prevent="$emit('navigate','topics')">Topics</a></li>
           <li class="nav-item"><a :class="linkClass('tools')" href="#" @click.prevent="$emit('navigate','tools')">Tools</a></li>
+          <li class="nav-item">
+  <a class="nav-link" :class="{ active: current==='data' }" @click="$emit('navigate','data')">
+    Data
+  </a>
+</li>
+
           <li class="nav-item"><a :class="linkClass('form')" href="#" @click.prevent="$emit('navigate','form')">Health Check</a></li>
           <li v-if="user && user.role==='admin'" class="nav-item"><a :class="linkClass('admin')" href="#" @click.prevent="$emit('navigate','admin')">Admin</a></li>
+          <li class="nav-item">
+  <a class="nav-link" @click="$emit('navigate','email')">
+    <i class="bi bi-envelope"></i> Email
+  </a> 
+</li>
+
         </ul>
         <div class="d-flex align-items-center gap-2 text-light">
           <span v-if="user" class="small">Hello, {{ user.email }} <span class="badge bg-secondary text-uppercase ms-1">{{ user.role }}</span></span>
