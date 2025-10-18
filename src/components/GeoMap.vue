@@ -1,3 +1,4 @@
+
 <template>
   <div class="container py-4">
     <h3 class="mb-3">Nearby Health & Fitness Map</h3>
