@@ -19,6 +19,15 @@
         <div class="form-text">Use comma to separate multiple emails.</div>
       </div>
 
+     
+<div class="mb-2">
+  <span class="me-2 text-muted small">Quick groups:</span>
+  <button type="button" class="btn btn-sm btn-outline-secondary me-1" @click="fillGroup('staff')">Staff</button>
+  <button type="button" class="btn btn-sm btn-outline-secondary me-1" @click="fillGroup('volunteers')">Volunteers</button>
+  <button type="button" class="btn btn-sm btn-outline-secondary" @click="fillGroup('all')">All users</button>
+</div>
+
+
       <div class="mb-2">
         <label class="form-label">Message</label>
         <textarea
@@ -71,6 +80,19 @@ function clearForm(){
   message.value = ''
   attachmentUrl.value = ''
   status.value = ''
+}
+
+const groups = {
+  staff: ['doc1@demo.com','doc2@demo.com'],
+  volunteers: ['vol1@demo.com','vol2@demo.com'],
+  all: ['doc1@demo.com','doc2@demo.com','vol1@demo.com','vol2@demo.com','user@demo.com'],
+}
+
+function fillGroup(key){
+  const list = groups[key] || []
+  const exist = (recipients.value || '').trim()
+  const merged = Array.from(new Set([ ...exist.split(',').map(s=>s.trim()).filter(Boolean), ...list ]))
+  recipients.value = merged.join(',')
 }
 
 

@@ -1,6 +1,5 @@
-<!-- src/components/NavBar.vue -->
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" role="navigation" aria-label="Main">
     <div class="container">
       <a class="navbar-brand fw-semibold" href="#" @click.prevent="emit('navigate','home')">
         Men's Health
@@ -18,11 +17,11 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="mainNav">
-        <!-- left -->
+      <div id="mainNav" class="collapse navbar-collapse">
+       
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a :class="itemClass('home')"    href="#" @click.prevent="emit('navigate','home')" aria-current="page">Home</a>
+            <a :class="itemClass('home')"    href="#" @click.prevent="emit('navigate','home')"  aria-current="page">Home</a>
           </li>
           <li class="nav-item">
             <a :class="itemClass('topics')"  href="#" @click.prevent="emit('navigate','topics')">Topics</a>
@@ -43,17 +42,26 @@
             <a :class="itemClass('email')"   href="#" @click.prevent="emit('navigate','email')">Email</a>
           </li>
           <li class="nav-item">
+            <a :class="itemClass('ai')" href="#" @click.prevent="emit('navigate','ai')">AI</a>
+          </li>
+          <li class="nav-item">
+            <a :class="itemClass('calendar')" href="#" @click.prevent="emit('navigate','calendar')">Calendar</a>
+          </li>
+          <li class="nav-item">
+            <a :class="itemClass('dashboard')" href="#" @click.prevent="emit('navigate','dashboard')">Dashboard</a>
+          </li>
+          <li class="nav-item">
             <a :class="itemClass('admin')"   href="#" @click.prevent="emit('navigate','admin')">Admin</a>
           </li>
           <li class="nav-item">
-            <a :class="itemClass('export')" href="#" @click.prevent="emit('navigate','export')">Export</a>
+            <a :class="itemClass('export')"  href="#" @click.prevent="emit('navigate','export')">Export</a>
           </li>
         </ul>
 
-        <!-- right: auth -->
-        <div class="d-flex gap-2">
+        
+        <div class="d-flex gap-2 align-items-center">
           <template v-if="user">
-            <span class="navbar-text me-2 small text-muted">Hello, {{ user.email || 'user' }}</span>
+            <span class="navbar-text small text-muted">Hello, {{ user.email || 'user' }}</span>
             <button class="btn btn-outline-secondary btn-sm" @click="emit('logout')">Logout</button>
           </template>
           <template v-else>

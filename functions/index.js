@@ -1,42 +1,54 @@
-// functions/index.js (v2 API)
-const { onCall, HttpsError, onRequest } = require('firebase-functions/v2/https');
-const admin = require('firebase-admin');
 
-try { admin.initializeApp(); } catch (e) { /* already init */ }
+const functions = require('firebase-functions/v2/https');
+const logger = require('firebase-functions/logger');
+const cors = require('cors')({ origin: true }); 
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-exports.healthAdvice = onCall({ region: 'australia-southeast1' }, async (request) => {
-  const data = request && request.data ? request.data : {};
-  const age  = Number(data.age || 0);
-  const goal = String(data.goal || '').toLowerCase();
-  const rhr  = Number(data.rhr || 0);
-
-  if (!age || !goal) {
-    throw new HttpsError('invalid-argument', 'Missing age or goal.');
-  }
-
+exports.aiAdvice = functions.onRequest(
+  { region: 'australia-southeast1', timeoutSeconds: 60, memory: '256MiB' },
+  async (req, res) => {
   
-  let tip = 'Aim for 150 min/week of moderate activity, plus 2× strength.';
-  if (goal.indexOf('weight') >= 0) tip = 'Slight calorie deficit + 150-300 min/week cardio.';
-  if (goal.indexOf('muscle') >= 0) tip = 'Protein 1.6-2.2 g/kg + 3× full-body strength.';
-  if (goal.indexOf('stress') >= 0) tip = '20-30 min walking daily + 10 min breathwork/yoga.';
-  if (rhr && rhr > 90) tip += ' Your RHR is high; consider more recovery & consistent sleep.';
+    cors(req, res, async () => {
+      if (req.method === 'OPTIONS') {
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Headers', 'content-type');
+        res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        return res.status(204).send('');
+      }
 
-  
-  try {
-    const uid = request && request.auth ? request.auth.uid : null;
-    await admin.firestore().collection('advice_logs').add({
-      ts: admin.firestore.FieldValue.serverTimestamp(),
-      uid, age, goal, rhr
+      try {
+        if (req.method !== 'POST') {
+          return res.status(405).json({ error: 'Method Not Allowed' });
+        }
+
+        const { age, rhr, goal } = req.body || {};
+        if (!age || !rhr || !goal) {
+          return res.status(400).json({ error: 'Missing fields: age, rhr, goal are required.' });
+        }
+
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+        const prompt = `
+You are a men's health coach. Give concise, practical advice in 3-5 bullet points.
+User profile:
+- Age: ${age}
+- Resting heart rate: ${rhr} bpm
+- Goal: ${goal}
+
+Keep it safe, non-diagnostic, and action-oriented.`;
+
+        const result = await model.generateContent(prompt);
+        const text = result.response?.text() || 'No advice generated.';
+
+        res.set('Access-Control-Allow-Origin', '*');
+        return res.status(200).json({ advice: text });
+      } catch (err) {
+        logger.error('aiAdvice error', err);
+        res.set('Access-Control-Allow-Origin', '*');
+        return res.status(500).json({ error: 'internal', detail: String(err?.message || err) });
+      }
     });
-  } catch (e) {
-    
   }
-
-  return { advice: tip };
-});
-
-
-exports.helloPing = onRequest({ region: 'australia-southeast1' }, (req, res) => {
-  res.json({ ok: true, time: new Date().toISOString() });
-});
+);
